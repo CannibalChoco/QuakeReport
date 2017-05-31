@@ -14,9 +14,13 @@ import java.util.Date;
 import static com.example.android.quakereport.R.id.date;
 import static com.example.android.quakereport.R.id.location;
 import static com.example.android.quakereport.R.id.magnitude;
+import static com.example.android.quakereport.R.id.offset_location;
+import static com.example.android.quakereport.R.id.time;
 
 
 public class EarthquakeAdapter extends ArrayAdapter {
+
+    private static final String LOCATION_SEPARATOR = " of ";
 
     public EarthquakeAdapter(Activity context, ArrayList<Earthquake> earthquakes){
         super(context, 0, earthquakes);
@@ -34,18 +38,38 @@ public class EarthquakeAdapter extends ArrayAdapter {
         // get the Attraction object located at this position in the list
         Earthquake currentEarthquake = (Earthquake) getItem(position);
 
-        TextView magnitudeView = (TextView) listItemView.findViewById(magnitude);
+        // set the magnitude
+        TextView magnitudeView = (TextView) listItemView.findViewById(R.id.magnitude);
         magnitudeView.setText(currentEarthquake.getMagnitude());
 
-        TextView locationView = (TextView) listItemView.findViewById(location);
-        locationView.setText(currentEarthquake.getLocationName());
 
+        String location = currentEarthquake.getLocationName();
+        String locationOffset;
+        String primaryLocation;
+        if (location.contains(LOCATION_SEPARATOR)) {
+            String[] parts = location.split(LOCATION_SEPARATOR);
+            locationOffset = parts[0] + LOCATION_SEPARATOR;
+            primaryLocation = parts[1];
+        } else {
+            locationOffset = getContext().getString(R.string.near_the);
+            primaryLocation = location;
+        }
+
+        // set location, divided in offset and primary location
+        TextView primaryLocationView = (TextView) listItemView.findViewById(R.id.primary_location);
+        primaryLocationView.setText(primaryLocation);
+        TextView locationOffsetView = (TextView) listItemView.findViewById(R.id.location_offset);
+        locationOffsetView.setText(locationOffset);
+
+        // create date object to format time and date
         Date dateObject = new Date(currentEarthquake.getTimeInMiliseconds());
 
-        TextView dateView = (TextView) listItemView.findViewById(date);
+        // format date, set in TextView
+        TextView dateView = (TextView) listItemView.findViewById(R.id.date);
         String formattedDate = formatDate(dateObject);
         dateView.setText(formattedDate);
 
+        // format time and set up in TextView
         TextView timeView = (TextView) listItemView.findViewById(R.id.time);
         String formattedTime = formatTime(dateObject);
         timeView.setText(formattedTime);
