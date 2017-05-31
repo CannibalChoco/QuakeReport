@@ -6,10 +6,10 @@ import static com.example.android.quakereport.R.id.date;
 public class Earthquake {
 
     private String locationName;
-    private String magnitude;
+    private double magnitude;
     private long timeInMiliseconds;
 
-    public Earthquake(String magnitude, String locationName, long timeInMiliseconds){
+    public Earthquake(double magnitude, String locationName, long timeInMiliseconds){
         this.locationName = locationName;
         this.magnitude = magnitude;
         this.timeInMiliseconds = timeInMiliseconds;
@@ -19,7 +19,7 @@ public class Earthquake {
         return locationName;
     }
 
-    public String getMagnitude() {
+    public double getMagnitude() {
         return magnitude;
     }
 
