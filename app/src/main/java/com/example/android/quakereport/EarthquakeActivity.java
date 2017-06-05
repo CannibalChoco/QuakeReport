@@ -17,8 +17,11 @@ package com.example.android.quakereport;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -38,14 +41,12 @@ import static android.view.View.GONE;
 public class EarthquakeActivity extends AppCompatActivity
         implements LoaderCallbacks<List<Earthquake>> {
 
+    private ConnectivityManager connectivityManager;
     // Constant value for the EarthquakeLoader ID
     private static final int EARTHQUAKE_LOADER_ID = 1;
-    EarthquakeAdapter adapter;
-
-    TextView emptyStateTextView;
-
+    private EarthquakeAdapter adapter;
+    private TextView emptyStateTextView;
     private static final String LOG_TAG = EarthquakeActivity.class.getName();
-
     private static final String USGS_REQUEST_URL =
             "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
@@ -63,6 +64,7 @@ public class EarthquakeActivity extends AppCompatActivity
         emptyStateTextView = (TextView) findViewById(R.id.empty_view);
         earthquakeListView.setEmptyView(emptyStateTextView);
 
+
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -77,6 +79,7 @@ public class EarthquakeActivity extends AppCompatActivity
         // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
         // because this activity implements the LoaderCallbacks interface).
         Log.i(LOG_TAG, "TEST: calling initLoader() ...");
+
         loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
     }
 
@@ -109,7 +112,18 @@ public class EarthquakeActivity extends AppCompatActivity
             adapter.addAll(earthquakes);
         }
 
-        emptyStateTextView.setText(R.string.empty_state_text_view);
+        // check for network connection
+        connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if (!isConnected) {
+            emptyStateTextView.setText(R.string.no_internet_connection);
+        } else {
+            emptyStateTextView.setText(R.string.no_earthquakes);
+        }
     }
 
     @Override
