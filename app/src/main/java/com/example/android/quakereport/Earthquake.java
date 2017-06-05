@@ -32,4 +32,14 @@ public class Earthquake {
     public String getUrl() {
         return url;
     }
+
+    @Override
+    public String toString() {
+        return "Earthquake{" +
+                "locationName='" + locationName + '\'' +
+                ", magnitude=" + magnitude +
+                ", timeInMiliseconds=" + timeInMiliseconds +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }
