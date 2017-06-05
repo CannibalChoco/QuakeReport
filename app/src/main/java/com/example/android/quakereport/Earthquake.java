@@ -1,8 +1,6 @@
 package com.example.android.quakereport;
 
 
-import static com.example.android.quakereport.R.id.date;
-
 public class Earthquake {
 
     private String locationName;
