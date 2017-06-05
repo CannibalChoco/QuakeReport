@@ -18,12 +18,13 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.android.quakereport.EarthquakeActivity.LOG_TAG;
 
 /**
  * Helper methods related to requesting and receiving earthquake data from USGS.
  */
 public final class QueryUtils {
+
+    private static final String LOG_TAG = QueryUtils.class.getName();
 
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
@@ -37,6 +38,8 @@ public final class QueryUtils {
      * Query the USGS dataset and return an {@link List<Earthquake>} objects to represent a single earthquake.
      */
     public static List<Earthquake> fetchEarthquakeData(String requestUrl) {
+        Log.i(LOG_TAG, "TEST: fetchEarthquakeData() called ...");
+
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -165,7 +168,7 @@ public final class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e);
         }
 
         // Return the list of earthquakes
