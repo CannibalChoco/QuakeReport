@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-
 public class EarthquakeAdapter extends ArrayAdapter {
 
     private static final String LOCATION_SEPARATOR = " of ";
